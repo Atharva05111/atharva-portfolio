@@ -5,7 +5,7 @@ export default function Navbar() {
         <span aria-hidden="true" className="text-xl">
           ✦
         </span>
-        <span className="font-hand text-2xl font-700">atharva</span>
+        <span className="font-hand text-2xl font-700">atharva dhamal</span>
       </a>
       <nav className="flex items-center gap-6 text-sm font-medium">
         <a href="#projects" className="hover:opacity-60 transition-opacity focus-ring">
