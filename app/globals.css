@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  --font-hand: "Caveat", cursive;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
+}
+
+body {
+  background-color: #fdfdfb;
+  background-image: radial-gradient(rgba(17, 17, 17, 0.14) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+::selection {
+  background-color: #f6c544;
+  color: #111111;
+}
+
+.rail {
+  position: relative;
+}
+
+.rail::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #111111;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1em 0.5em;
+  font-family: var(--font-hand);
+  font-weight: 700;
+  font-size: 1.1em;
+  line-height: 1.4;
+  transform: rotate(-1deg);
+}
+
+.focus-ring:focus-visible {
+  outline: 3px solid #111111;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
