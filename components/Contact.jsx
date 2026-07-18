@@ -4,18 +4,35 @@ import { useState } from "react";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("idle"); // 'idle', 'submitting', 'success', 'error'
 
   function update(field) {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    const subject = encodeURIComponent(`Project inquiry from ${form.name || "your website"}`);
-    const body = encodeURIComponent(
-      `${form.message}\n\n— ${form.name}\n${form.email}`
-    );
-    window.location.href = `mailto:atharva.rd2915@gmail.com?subject=${subject}&body=${body}`;
+    setStatus("submitting");
+
+    try {
+      const response = await fetch("https://formspree.io/f/xgogkegj", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        setForm({ name: "", email: "", message: "" }); // Reset form fields
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
   }
 
   return (
@@ -34,6 +51,7 @@ export default function Contact() {
             <span className="tag bg-note-pink border border-ink inline-block mb-1">Name</span>
             <input
               type="text"
+              name="name"
               required
               value={form.name}
               onChange={update("name")}
@@ -48,6 +66,7 @@ export default function Contact() {
             </span>
             <input
               type="email"
+              name="email"
               required
               value={form.email}
               onChange={update("email")}
@@ -62,6 +81,7 @@ export default function Contact() {
             </span>
             <input
               type="text"
+              name="message"
               required
               value={form.message}
               onChange={update("message")}
@@ -70,12 +90,22 @@ export default function Contact() {
             />
           </label>
 
-          <button
-            type="submit"
-            className="inline-block bg-ink text-paper font-medium px-6 py-3 shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all focus-ring"
-          >
-            Send Here
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={status === "submitting"}
+              className="inline-block bg-ink text-paper font-medium px-6 py-3 shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all focus-ring disabled:opacity-50"
+            >
+              {status === "submitting" ? "Sending..." : "Send Here"}
+            </button>
+
+            {status === "success" && (
+              <p className="text-emerald-600 font-medium">Message sent successfully!</p>
+            )}
+            {status === "error" && (
+              <p className="text-rose-600 font-medium">Something went wrong. Please try again.</p>
+            )}
+          </div>
         </form>
       </div>
     </section>
